@@ -5,15 +5,15 @@ function calculateDayInYear(date) {
   const day = Number(splitDate[2]);
 
   const validMonth = function(month) {
-    return month && month >= 1 && month < 12;
+    return month && month >= 1 && month <= 12;
   }
 
   const validDay = function(month, day) {
-    return day && day >= 1 && day < DAYS_IN_MONTH[month - 1];
+    return day && day >= 1 && day <= DAYS_IN_MONTH[month - 1];
   }
 
   const calculateDayNumber = function(month, day) {
-    let dayOfYear = 1;
+    let dayOfYear = day;
 
     for (let i = 1; i < month; i++) {
       dayOfYear += DAYS_IN_MONTH[i - 1];
@@ -23,11 +23,24 @@ function calculateDayInYear(date) {
   }
 
   const daysInFeb = function(year) {
+    if (isLeapYear(year)) {
+      return 29;
+    }
     return 28;
   }
 
   const isLeapYear = function(year) {
-    return isMultiple(year, 400) || !isMultiple(year, 100) && isMultiple(year, 4);
+    if (!isMultiple(year, 4)) {
+      return false;
+    } else if (!isMultiple(year, 100)) {
+      return true;
+    } else if (isMultiple(year, 400)) {
+      return true;
+    }
+
+    return false;
+    //original code
+    //return isMultiple(year, 400) || !isMultiple(year, 100) && isMultiple(year, 4);
   }
 
   const DAYS_IN_MONTH = [31, daysInFeb(year), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
